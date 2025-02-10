@@ -3,7 +3,7 @@ import { Categories, mockData } from "../assets/mockData"
 import HeroImage from "../assets/images/bg_hero.webp"
 import InfoSection from "../components/infoSection"
 import CategorySection from "../components/categorySection"
-import { setProducts } from "../redux/cartSlice"
+import { setProducts } from "../redux/reducers/cartSlice"
 import { useDispatch, useSelector } from "react-redux"
 
 // bg_hero.webp
