@@ -1,13 +1,13 @@
 import React from "react"
 import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa"
+import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { loggedUser } from '../redux/actions/loggeduseraction';
 import { useSelector, useDispatch} from 'react-redux';
 
 const NavBar = () =>{
 
-
-
+    const products = useSelector(state => state.cart.products)
     const name = useSelector((state) => state.user.name)
     const type = useSelector((state) => state.user.type)
 
@@ -16,6 +16,7 @@ const NavBar = () =>{
     const logout = () => {
         dispatch(loggedUser(''))
     }
+
 
     return(
         <nav className="bg=white shadow-md">
@@ -30,8 +31,13 @@ const NavBar = () =>{
                     </form>
                 </div>
                 <div className="flex items-center space-x-4">
-                    <Link to="/cart">
+                    <Link to="/cart" className="relative">
                         <FaShoppingCart className="text-lg"/>
+                        {products.length > 0 && (
+                            <span className="absolute top-0 text-xs w-3 left-3 bg-red-600 rounded-full flex justify-center items-center text-white">
+                                {products.length}
+                            </span>
+                        )}
                     </Link>
                     {!name && (<Link to="/login" className="hidden md:block">Login</Link>)}
                     {!name && (<p>|</p>)}
@@ -44,10 +50,14 @@ const NavBar = () =>{
                 <Link to="/" className="hover:underline">
                     Home
                 </Link>
+
+                <Link to="/shop" className="hover:underline">
+
                 {type == "admin" && (<Link to="/products" className="hover:underline">
                     Managment
                 </Link>)}
                 <Link to="/" className="hover:underline">
+
                     Shop
                 </Link>
                 <Link to="/" className="hover:underline">
