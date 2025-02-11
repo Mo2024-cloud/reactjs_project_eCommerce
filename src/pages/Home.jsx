@@ -3,17 +3,20 @@ import { Categories, mockData } from "../assets/mockData"
 import HeroImage from "../assets/images/bg_hero.webp"
 import InfoSection from "../components/infoSection"
 import CategorySection from "../components/categorySection"
-import { setProducts } from "../redux/cartSlice"
+import { setProducts } from "../redux/productSlice"
 import { useDispatch, useSelector } from "react-redux"
+import ProductCard from "../components/ProductCard"
+import Shop from "./Shop"
 
 // bg_hero.webp
 const Home = () =>{
-    // const dispatch = useDispatch()
-    // const products = useSelector(state => state.product)
-    // useEffect(()=>{
-    //     dispatch(setProducts(mockData))
-    // },[])
+    const dispatch = useDispatch()
+    const products = useSelector(state => state.product)
+    useEffect(() => {
+        dispatch(setProducts(mockData))
+    }, [])
     return(
+        <div>
         <div className="bg-white mt-2 px-4 md:px-16 lg:px-24">
             <div className="container mx-auto py-4 flex flex-col md:flex-row space-x-2">
                 <div className="w-full md:w-3/12">
@@ -40,14 +43,17 @@ const Home = () =>{
             </div>
             <InfoSection/>
             <CategorySection/>
-            {/* <div>
-                <h2>Top Products</h2>
-                <div>
-
+            <div className="container mx-auto py-12">
+                <h2 className="text-2xl font-bold mb-6 text-center">Top Products</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 cursor-pointer">
+                    {products.products.slice(0,5).map(((product)=>(
+                        <ProductCard product={product}/>
+                    )))}
                 </div>
-            </div> */}
+            </div>
         </div>
-        
+        <Shop/>
+        </div>
     )
 }
 
