@@ -14,16 +14,20 @@ function App() {
 
   return (
     <BrowserRouter>
-      <NavBar/>
-        <Routes>
-          <Route path="/" element={<Home/>}></Route>
-          <Route path="/shop" element={<Shop />}></Route>
-          <Route path="/cart" element={<Cart />}></Route>
-          <Route path="/products" element={<Products/>}></Route>
-          <Route path="/login" element={<div className="flex items-center justify-center mt-5"><Login/></div>}></Route>
-          <Route path="/register" element={<div className="flex items-center justify-center mt-5"><Register/></div>}></Route>
-        </Routes>
-      <Footer />
+      <div className="flex flex-col min-h-screen">
+        <NavBar/>
+            <main className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Home/>}></Route>
+              <Route path="/shop" element={<Shop />}></Route>
+              <Route path="/cart" element={<Cart />}></Route>
+              <Route path="/products" element={<Products/>}></Route>
+              <Route path="/login" element={<div className="flex items-center justify-center mt-5 mb-auto"><Login/></div>}></Route>
+              <Route path="/register" element={<div className="flex items-center justify-center mt-5 mb-auto"><Register/></div>}></Route>
+            </Routes>
+          </main>  
+        <Footer />
+      </div>
     </BrowserRouter>
   )
 }

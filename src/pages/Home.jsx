@@ -3,18 +3,24 @@ import { Categories, mockData } from "../assets/mockData"
 import HeroImage from "../assets/images/bg_hero.webp"
 import InfoSection from "../components/infoSection"
 import CategorySection from "../components/categorySection"
-import { setProducts } from "../redux/productSlice"
-import { setProducts } from "../redux/reducers/cartSlice"
+// import { setProducts } from "../redux/productSlice"
+import { setProducts } from "../redux/reducers/productSlice"
 import { useDispatch, useSelector } from "react-redux"
 import ProductCard from "../components/ProductCard"
 import Shop from "./Shop"
+import axios from "axios"
 
+// dispatch(setProducts(mockData))
+// dispatch(setProducts(responce.data)))
 // bg_hero.webp
 const Home = () =>{
     const dispatch = useDispatch()
     const products = useSelector(state => state.product)
+    
     useEffect(() => {
-        dispatch(setProducts(mockData))
+        axios.get("https://retoolapi.dev/NRdH0u/products")
+        .then((responce) => dispatch(setProducts(responce.data)))
+        .catch((err) => console.log(err))
     }, [])
     return(
         <div>
@@ -32,7 +38,7 @@ const Home = () =>{
                         </ul>
                 </div>
                     
-                <div className="w-full md:w-9/12 mt-8 md:mt-0 h-96 relative">
+                <div className="w-full md:w-9/12 mt-8 md:mt-0 relative">
                         <img src={HeroImage} alt="" className="w-full"/>
                         <div className="absolute top-16 left-8">
                             <p className="text-white mb-4">Code with Mohamed</p>
@@ -53,7 +59,7 @@ const Home = () =>{
                 </div>
             </div>
         </div>
-        <Shop/>
+        {/* <Shop/> */}
         </div>
     )
 }

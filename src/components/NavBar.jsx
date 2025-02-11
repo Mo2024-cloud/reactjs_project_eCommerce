@@ -1,6 +1,6 @@
 import React from "react"
 import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa"
-import { useSelector } from "react-redux"
+// import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { loggedUser } from '../redux/actions/loggeduseraction';
 import { useSelector, useDispatch} from 'react-redux';
@@ -51,15 +51,15 @@ const NavBar = () =>{
                     Home
                 </Link>
 
-                <Link to="/shop" className="hover:underline">
+                <Link to="/shop" className="hover:underline">shop</Link>
 
                 {type == "admin" && (<Link to="/products" className="hover:underline">
                     Managment
                 </Link>)}
-                <Link to="/" className="hover:underline">
+                {/* <Link to="/" className="hover:underline">
 
                     Shop
-                </Link>
+                </Link> */}
                 <Link to="/" className="hover:underline">
                     Contact
                 </Link>
