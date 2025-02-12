@@ -1,17 +1,27 @@
-import React from "react"
+import React, { useState } from "react"
 import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa"
 // import { useSelector } from "react-redux"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { loggedUser } from '../redux/actions/loggeduseraction';
 import { useSelector, useDispatch} from 'react-redux';
+import { setSearchTerm } from "../redux/reducers/productSlice";
 
 const NavBar = () =>{
+
+    const favoritesCount = useSelector((state) => state.favorites.favorites.length);
 
     const products = useSelector(state => state.cart.products)
     const name = useSelector((state) => state.user.name)
     const type = useSelector((state) => state.user.type)
-
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [search,setSearch] = useState()
+
+    const handleSearch = (e) =>{
+        e.preventDefault()
+        dispatch(setSearchTerm(search))
+        navigate('/filter-data')
+    }
 
     const logout = () => {
         dispatch(loggedUser(''))
@@ -25,8 +35,9 @@ const NavBar = () =>{
                     <Link to="/">E-Shop</Link>
                 </div>
                 <div className="relative flex-1 mx-4">
-                    <form>
-                        <input type="text" placeholder="Search Product" className="w-full border py-2 px-4" />
+                    <form onSubmit={handleSearch}>
+                        <input type="text" placeholder="Search Product" className="w-full border py-2 px-4"
+                        onChange={(e) => setSearch(e.target.value)} />
                         <FaSearch className="absolute top-3 right-3 text-red-500"></FaSearch>
                     </form>
                 </div>
@@ -65,6 +76,9 @@ const NavBar = () =>{
                 </Link>
                 <Link to="/" className="hover:underline">
                     About
+                </Link>
+                <Link to="/favorites" className="hover:underline">
+                    Favorites ({favoritesCount})
                 </Link>
             </div>
         </nav>

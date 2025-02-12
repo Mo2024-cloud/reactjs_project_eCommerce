@@ -1,0 +1,43 @@
+// FavoritesPage.js
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { removeFromFavorites } from '../redux/actions/actionsFav';
+
+const FavoritesPage = () => {
+  const dispatch = useDispatch();
+  const favorites = useSelector((state) => state.favorites.favorites);
+//   const favorites = useSelector((state) => state.favorites.favorites);   
+
+  return (
+    <div className="container mt-4">
+      <h2 className="mb-4 text-center text-2xl font-bold">Favorites</h2>
+      {favorites.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {favorites.map((product) => (
+            <div className="bg-white p-4 shadow rounded relative border" key={product.id}>
+              <img
+                src={product.image}
+                className="w-full h-48 object-contain mb-4"
+                alt={product.name}
+              />
+              <h3 className="text-lg font-semibold">{product.name}</h3>
+              <p className="text-gray-500">${product.price}</p>
+              <button
+                className="absolute top-2 right-2 text-red-600 hover:text-red-800"
+                onClick={() => dispatch(removeFromFavorites(product.id))}
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="flex justify-center">
+          <h3 className="text-red-600">No favorite products added yet.</h3>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default FavoritesPage;

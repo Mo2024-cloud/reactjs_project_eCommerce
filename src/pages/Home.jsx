@@ -10,9 +10,6 @@ import ProductCard from "../components/ProductCard"
 import Shop from "./Shop"
 import axios from "axios"
 
-// dispatch(setProducts(mockData))
-// dispatch(setProducts(responce.data)))
-// bg_hero.webp
 const Home = () =>{
     const dispatch = useDispatch()
     const products = useSelector(state => state.product)
