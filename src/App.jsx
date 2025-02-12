@@ -17,7 +17,7 @@ import { Provider } from 'react-redux';
 import store from '../src/redux/store';
 import FavoritesPage from "./pages/FavoritesPage";
 import FilterData from "./pages/FilterData";
-import ProductInfo from "./pages/ProductInfo";
+// import ProductInfo from "./pages/ProductInfo";
 // import './App.css';
 function App() {
   return (
@@ -33,7 +33,7 @@ function App() {
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/favorites" element={<FavoritesPage />} />
               <Route path="/filter-data" element={<FilterData/>} />
-              <Route path="/product/:id" element={<ProductInfo/>} />
+              {/* <Route path="/product/:id" element={<ProductInfo/>} /> */}
               <Route path="/products" element={<Products />} />
               <Route path="/add-product" element={<div className="flex items-center justify-center mt-5 mb-auto"><AddProduct /></div>} />
               <Route path="/products/product-details/:id" element={<ProductDetails />} />

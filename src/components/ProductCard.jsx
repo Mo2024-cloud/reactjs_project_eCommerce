@@ -41,7 +41,7 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <Link to={`/product/${product.id}`}>
+    
     <div className="bg-white p-4 shadow rounded relative border transform transition-transform duration-300 hover:scale-105">
       <img className="w-full h-48 object-contain mb-4" src={product.image} alt={product.name} />
       <h3 className="text-lg font-semibold">{product.name}</h3>
@@ -71,7 +71,7 @@ const ProductCard = ({ product }) => {
         </div>
       )}
     </div>
-    </Link>
+    
   );
 };
 
