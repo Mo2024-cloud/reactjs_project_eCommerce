@@ -32,12 +32,19 @@ const cartSlice = createSlice({
     },
     removeFromCart(state, action) {
       const id = action.payload;
-      const findItem = state.products.find((item) => item.id === id);
+      if(id === "delete"){
+        state.totalPrice = 0;
+        state.totalQuantity = 0;
+        state.products = [];
+      }else{
+        const findItem = state.products.find((item) => item.id === id);
       if (findItem) {
         state.totalPrice -= findItem.totalPrice;
         state.totalQuantity -= findItem.quantity;
         state.products = state.products.filter(item => item.id !== id);
       }
+      }
+      
     },
     increaseQuantity(state, action) {
       const id = action.payload;

@@ -76,7 +76,7 @@ const Cart = () =>{
                                 <span>{cart.totalPrice.toFixed(2)}</span>
                             </div>
                             <button className="w-full bg-red-600 text-white py-2 hover:bg-red-800 rounded"
-                            onClick={() => navigate('/checkout')}>Checkout</button>
+                            onClick={() => dispatch(removeFromCart("delete"))}>Checkout</button>
                         </div>
                     </div>
                     <Modal isModelOpen={isModelOpen} setIsModelOpen = {setIsModelOpen}>

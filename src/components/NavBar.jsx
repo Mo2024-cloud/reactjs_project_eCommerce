@@ -78,7 +78,7 @@ const NavBar = () =>{
                     About
                 </Link>
                 <Link to="/favorites" className="hover:underline">
-                    Favorites ({favoritesCount})
+                    wish List  ({favoritesCount})
                 </Link>
             </div>
         </nav>
