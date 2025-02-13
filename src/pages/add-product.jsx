@@ -165,7 +165,7 @@ function Register(){
                 setvalmsg("Looking Good!!")
                 setproduct({
                     ...product,  
-                    price: value
+                    price: parseInt(value)
                 })
             }
             else 
@@ -198,7 +198,7 @@ function Register(){
                 setvalmsg("Looking Good!!")
                 setproduct({
                     ...product,  
-                    quantaty: value
+                    quantaty: parseInt(value)
                 })
             } 
             else 

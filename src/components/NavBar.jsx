@@ -4,11 +4,14 @@ import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa"
 import { Link, useNavigate } from "react-router-dom"
 import { loggedUser } from '../redux/actions/loggeduseraction';
 import { useSelector, useDispatch} from 'react-redux';
+import { Usertype } from '../redux/actions/loggeduseraction';
 import { setSearchTerm } from "../redux/reducers/productSlice";
+import { Usermail } from '../redux/actions/loggeduseraction';
 
 const NavBar = () =>{
 
     const favoritesCount = useSelector((state) => state.favorites.favorites.length);
+    console.log(favoritesCount)
 
     const products = useSelector(state => state.cart.products)
     const name = useSelector((state) => state.user.name)
@@ -16,6 +19,7 @@ const NavBar = () =>{
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [search,setSearch] = useState()
+    const totalQuantity = products.reduce((acc, product) => acc + product.quantity, 0);
 
     const handleSearch = (e) =>{
         e.preventDefault()
@@ -25,6 +29,9 @@ const NavBar = () =>{
 
     const logout = () => {
         dispatch(loggedUser(''))
+        dispatch(Usertype(''))
+        dispatch(Usermail(''))
+        navigate('/')
     }
 
 
@@ -44,14 +51,15 @@ const NavBar = () =>{
                 <div className="flex items-center space-x-4">
                     <Link to="/cart" className="relative">
                         <FaShoppingCart className="text-lg"/>
-                        {products.length > 0 && (
+                        {totalQuantity > 0 && (
                             <span className="absolute top-0 text-xs w-3 left-3 bg-red-600 rounded-full flex justify-center items-center text-white">
-                                {products.length}
+                                {totalQuantity}
                             </span>
                         )}
                     </Link>
                     {!name && (<Link to="/login" className="hidden md:block">Login</Link>)}
-                    {!name && (<p>|</p>)}
+                    {name && (<Link className="hover:underline">welcome back, {name}</Link>)}
+                    <p>|</p>
                     {name && (<Link className="hover:underline" onClick={logout}>Log Out</Link>)}
                     {!name && (<Link to="/register" className="hidden md:block">Register</Link>)}
                     <button className="block md:hidden"><FaUser /></button>

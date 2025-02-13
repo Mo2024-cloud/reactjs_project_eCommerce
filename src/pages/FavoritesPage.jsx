@@ -2,14 +2,31 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromFavorites } from '../redux/actions/actionsFav';
+import { useEffect } from 'react';
 
 const FavoritesPage = () => {
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.favorites.favorites);
-//   const favorites = useSelector((state) => state.favorites.favorites);   
+  const usersdata = JSON.parse(localStorage.getItem('usersdata')) || []
+  const mail = useSelector((state) => state.user.email);
+//   const favorites = useSelector((state) => state.favorites.favorites);
+
+
+  useEffect(() => {
+  
+      const userIndex = usersdata.findIndex(user => user.email === mail);
+  
+      if (userIndex !== -1) {
+        const updatedUsersData = [...usersdata];
+        const user = updatedUsersData[userIndex];
+        user.wishlist = favorites;
+        localStorage.setItem('usersdata', JSON.stringify(updatedUsersData));
+      } 
+  }, [favorites]);
+
 
   return (
-    <div className="container mt-4 mb-5">
+    <div className="mt-4 mb-5">
       <h2 className="mb-4 text-center text-2xl font-bold">Favorites</h2>
       {favorites.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

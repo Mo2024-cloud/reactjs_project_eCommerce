@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState,useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import ProductCard from "../components/ProductCard"
 import { FaTrash, FaTrashAlt } from "react-icons/fa"
@@ -7,14 +7,91 @@ import ChangeAddress from "../components/changeAddress"
 import { removeFromCart } from "../redux/cartSlice"
 import { decreaseQuantity, increaseQuantity } from "../redux/reducers/cartSlice"
 import { Navigate, useNavigate } from "react-router-dom"
+import axios from "axios"
+
 
 
 const Cart = () =>{
+    const products = useSelector(state => state.product.products)
+
     const cart = useSelector(state => state.cart)
     const [address,setAddress] = useState('45 Trad ElNile Street')
     const [isModelOpen, setIsModelOpen] = useState(false)
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const usersdata = JSON.parse(localStorage.getItem('usersdata')) || []
+    const mail = useSelector((state) => state.user.email);
+    const [isModalOpen1, setIsModalOpen1] = useState(false);
+    const [isModalOpen2, setIsModalOpen2] = useState(false);
+    const [productId, setProductId] = useState(null);
+
+
+    useEffect(() => {
+    
+          const userIndex = usersdata.findIndex(user => user.email === mail);
+      
+          if (userIndex !== -1) {
+            const updatedUsersData = [...usersdata];
+            const user = updatedUsersData[userIndex];
+            user.cart = cart.products;
+            localStorage.setItem('usersdata', JSON.stringify(updatedUsersData));
+          } 
+      }, [cart]);
+      console.log(cart.products)
+      
+
+
+      const handleModalToggle1 = (id) => {
+        setProductId(id);
+        setIsModalOpen1((prev) => !prev);
+      };
+      const handleModalToggle2 = (id) => {
+        setProductId(id);
+        setIsModalOpen2((prev) => !prev);
+      };
+      const handleCloseModal = () => {
+        setIsModalOpen1(false);
+        setIsModalOpen2(false);
+      };
+      const deletprod = (e) => {
+        dispatch(removeFromCart(e))
+        handleCloseModal()
+    }
+    const checkout = async () => 
+    {
+        try
+        {
+            const updatePromises = cart.products.map(async (newItem) => 
+            {
+                const apiItem = products.find(item => item.id === newItem.id);
+                console.log(apiItem)
+                if (apiItem) 
+                {
+                    const updatedQuantity = apiItem.quantaty - newItem.quantity;
+                    console.log(updatedQuantity)
+
+                    const updatedItemData = {
+                        ...apiItem,
+                        quantaty: updatedQuantity, 
+                    };
+                    console.log(updatedItemData)
+
+                    const response = await axios.put(`https://retoolapi.dev/NRdH0u/products/${apiItem.id}`, updatedItemData);
+                    console.log('Update Response:', response.data);  
+                    return response;
+                }
+            });
+
+            await Promise.all(updatePromises);
+
+            dispatch(removeFromCart("delete"))
+        }  
+        catch (error) 
+        {
+            console.error('Error during checkout:', error);  
+        }
+    }
+
     return(
         <div className="container mx-auto py-8 min-h-95 px-4 md:px-16 lg:px-24">
                 {cart.products.length > 0 ?
@@ -50,11 +127,57 @@ const Cart = () =>{
                                                 onClick={() => dispatch(increaseQuantity(product.id))}>+</button>
                                             </div>
                                             <p>${(product.quantity * product.price).toFixed(2)}</p>
-                                            <button className="text-red-500 hover:text-red-700" onClick={() => dispatch(removeFromCart(product.id))}>
-                                                <FaTrashAlt/>
-                                            </button>
-                                        </div>
-                                    </div>
+                                            <div>
+                                                <button className="text-red-500 hover:text-red-700" onClick={() => handleModalToggle1(product.id)}>
+                                                    <FaTrashAlt/>
+                                                </button>
+                                                {isModalOpen1 && (
+                                                    <div
+                                                    className="fixed top-0 left-0 right-0 bottom-0 z-50 flex justify-center items-center w-full h-full"
+                                                    >
+                                                    <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700 p-4 w-1/3">
+                                                        <button
+                                                        type="button"
+                                                        onClick={handleCloseModal}
+                                                        className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center"
+                                                        >
+                                                        <svg
+                                                            className="w-3 h-3"
+                                                            aria-hidden="true"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            fill="none"
+                                                            viewBox="0 0 14 14"
+                                                        >
+                                                            <path
+                                                            stroke="currentColor"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                                                            />
+                                                        </svg>
+                                                        <span className="sr-only">Close modal</span>
+                                                        </button>
+                                                        <div className="text-center">
+                                                            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                                                                Are you sure you want to Remove this product from your cart?
+                                                            </h3>
+                                                            <button className="text-white bg-red-600 hover:bg-red-800 px-5 py-2.5 rounded-lg" onClick={() => deletprod(productId)}>
+                                                                Yes, I'm sure
+                                                            </button>
+                                                            <button
+                                                                onClick={handleCloseModal}
+                                                                className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700"
+                                                            >
+                                                                No, cancel
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                )}
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                 ))}
                             </div>
                         </div>
@@ -75,8 +198,55 @@ const Cart = () =>{
                                 <span>Total Price:</span>
                                 <span>{cart.totalPrice.toFixed(2)}</span>
                             </div>
+                            <div>
                             <button className="w-full bg-red-600 text-white py-2 hover:bg-red-800 rounded"
-                            onClick={() => dispatch(removeFromCart("delete"))}>Checkout</button>
+                            onClick={() => handleModalToggle2()}>Checkout</button>
+                            {isModalOpen2 && (
+                                                    <div
+                                                    className="fixed top-0 left-0 right-0 bottom-0 z-50 flex justify-center items-center w-full h-full"
+                                                    >
+                                                    <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700 p-4 w-1/3">
+                                                        <button
+                                                        type="button"
+                                                        onClick={handleCloseModal}
+                                                        className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center"
+                                                        >
+                                                        <svg
+                                                            className="w-3 h-3"
+                                                            aria-hidden="true"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            fill="none"
+                                                            viewBox="0 0 14 14"
+                                                        >
+                                                            <path
+                                                            stroke="currentColor"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                                                            />
+                                                        </svg>
+                                                        <span className="sr-only">Close modal</span>
+                                                        </button>
+                                                        <div className="text-center">
+                                                            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                                                                Are you sure you want to buy all the items in your cart totaling ({cart.totalPrice.toFixed(2)}) ?
+                                                            </h3>
+                                                            <button className="text-white bg-red-600 hover:bg-red-800 px-5 py-2.5 rounded-lg" onClick={checkout}>
+                                                                Yes, I'm sure
+                                                            </button>
+                                                            <button
+                                                                onClick={handleCloseModal}
+                                                                className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700"
+                                                            >
+                                                                No, cancel
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                )}
+
+                            </div>
                         </div>
                     </div>
                     <Modal isModelOpen={isModelOpen} setIsModelOpen = {setIsModelOpen}>

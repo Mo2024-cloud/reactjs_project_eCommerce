@@ -6,7 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch} from 'react-redux';
 import { loggedUser } from '../redux/actions/loggeduseraction';
 import { Usertype } from '../redux/actions/loggeduseraction';
+import { Usermail } from '../redux/actions/loggeduseraction';
 import { Link } from 'react-router-dom';
+import { setCart } from "../redux/reducers/cartSlice";
+import { setFavorites } from '../redux/actions/actionsFav';
 
 
 function Login(){
@@ -113,13 +116,40 @@ function Login(){
                 {
                     dispatch(loggedUser(user.name))
                     dispatch(Usertype(user.type))
+                    dispatch(Usermail(user.email))
                     navigate('/products'); 
+                    const userCart = user.cart || [];
+                    const totalQuantity = userCart.reduce((acc, product) => acc + product.quantity, 0);
+                    const totalPrice = userCart.reduce((acc, product) => acc + product.totalPrice, 0);
+                    if(userCart){
+                    dispatch(setCart({ products: userCart, totalQuantity, totalPrice }));
+                    }else{
+                    dispatch(setCart({ products: [], totalQuantity: 0, totalPrice: 0 }));
+                    } 
+                    const userwish = user.wishlist || [];
+  
+                    dispatch(setFavorites(userwish));
+                    // }else{
+                    // dispatch(setFavorites([]));
+                    // }   
+                      
                 }
                 else
                 {
                     dispatch(loggedUser(user.name))
                     dispatch(Usertype(user.type))
+                    dispatch(Usermail(user.email))
                     navigate('/');
+                    const userCart = user.cart || [];
+                    const totalQuantity = userCart.reduce((acc, product) => acc + product.quantity, 0);
+                    const totalPrice = userCart.reduce((acc, product) => acc + product.totalPrice, 0);
+                    if(userCart){
+                    dispatch(setCart({ products: userCart, totalQuantity, totalPrice }));
+                    }else{
+                    dispatch(setCart({ products: [], totalQuantity: 0, totalPrice: 0 }));
+                    } 
+                    const userwish = user.wishlist || [];
+                    dispatch(setFavorites(userwish));
                 }
             else
             {

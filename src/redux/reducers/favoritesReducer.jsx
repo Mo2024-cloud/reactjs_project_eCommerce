@@ -1,5 +1,5 @@
 // favoritesReducer.js
-import { ADD_TO_FAVORITES, REMOVE_FROM_FAVORITES } from '../actions/actionsFav';
+import { ADD_TO_FAVORITES, REMOVE_FROM_FAVORITES, SET_FAVORITES } from '../actions/actionsFav';
 
 const initialState = {
   favorites: [],
@@ -7,6 +7,11 @@ const initialState = {
 
 const favoritesReducer = (state = initialState, action) => {
   switch (action.type) {
+    case SET_FAVORITES:
+      return {
+        ...state, 
+        favorites: action.payload
+      };
     case ADD_TO_FAVORITES:
       return {
         ...state,

@@ -13,6 +13,7 @@ import axios from "axios"
 const Home = () =>{
     const dispatch = useDispatch()
     const products = useSelector(state => state.product)
+    console.log(products)
     
     useEffect(() => {
         axios.get("https://retoolapi.dev/NRdH0u/products")

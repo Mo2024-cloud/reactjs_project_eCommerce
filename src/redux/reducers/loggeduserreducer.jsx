@@ -16,6 +16,11 @@ export function loggeduser (state=INITIAL_VALUE, action){
             ...state,
             type: action.payload
         }  
+        case "mail":  
+        return{
+            ...state,
+            email: action.payload
+        }
         default: 
             return state
     }

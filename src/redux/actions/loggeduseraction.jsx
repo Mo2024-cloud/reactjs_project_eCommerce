@@ -3,9 +3,13 @@ export const loggedUser = (payload) => ({
     payload
   });
 
-  export const Usertype = (payload) => ({
+export const Usertype = (payload) => ({
     type: "type",
     payload
   });
 
+export const Usermail = (payload) => ({
+    type: "mail",
+    payload
+  });
 
