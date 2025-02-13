@@ -7,3 +7,5 @@ export const loggedUser = (payload) => ({
     type: "type",
     payload
   });
+
+
