@@ -9,7 +9,7 @@ A fully responsive shopping website built with React, Tailwind CSS, and Redux. U
 - Simulated checkout process
 - Persistent state with localStorage
 - Global state management using Redux Toolkit
-- API calls with Axios (mock or real data source)
+- API calls with Axios
 - Responsive design using Tailwind CSS
 
 ## Tech Stack
@@ -37,14 +37,9 @@ npm install
 npm run dev
 ```
 
-The app will be running at `http://localhost:5173` (if using Vite).
+The app will be running at `http://localhost:5173`.
 
 
-## Future Improvements
-
-- Integrate real payment gateway
-- Add user authentication
-- Product search and filter enhancements
 
 ## Authors
 
